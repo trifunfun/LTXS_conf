@@ -177,6 +177,15 @@
       font-size: 12px;
       margin-top: 10px;
     }
+    .success {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,224,255,0.35);
+      background: rgba(0,224,255,0.08);
+      color: var(--text);
+      margin-bottom: 8px;
+    }
     .footer {
       margin-top: 56px;
       padding-top: 24px;
@@ -212,7 +221,13 @@
 
       <section class="panel" aria-labelledby="contact-title">
         <h2 id="contact-title" style="margin:0 0 14px; font-size:18px; letter-spacing:0.2px;">Contact for Trial</h2>
-        <form id="contact-form">
+        <form id="contact-form" action="https://formsubmit.co/otrifan@lightricks.com" method="POST">
+          <input type="hidden" name="_subject" value="LTX Studio Trial - 1 Month Free">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="box">
+          <input type="hidden" name="_next" value="./?submitted=1">
+
+          <div id="success" class="success">Thanks! Your message has been sent.</div>
           <div>
             <label for="name">Your Name</label>
             <input id="name" name="name" type="text" autocomplete="name" placeholder="Jane Doe" required>
@@ -226,10 +241,9 @@
             <textarea id="message" name="message" placeholder="I'd love to try LTX Studio for a month. Thanks!" required></textarea>
           </div>
           <div class="actions full">
-            <button type="submit" class="btn-primary">Draft Email</button>
-            <a id="open-email" class="btn-secondary" href="#">Open Draft</a>
+            <button type="submit" class="btn-primary">Send</button>
           </div>
-          <p class="fine-print full">Draft opens in your default email client. We do not store any data on this page.</p>
+          <p class="fine-print full">We will contact you back shortly after receiving your message.</p>
         </form>
       </section>
     </header>
@@ -241,50 +255,12 @@
   </div>
 
   <script>
-    // Set your recipient email here:
-    const RECIPIENT_EMAIL = "otrifan@lightricks.com";
-
-    const form = document.getElementById('contact-form');
-    const openEmailLink = document.getElementById('open-email');
-
-    function buildMailtoUrl(name, email, message) {
-      const subject = `LTX Studio Trial - 1 Month Free`;
-      const bodyLines = [
-        `Hi LTX Team,`,
-        ``,
-        `I'd like to request a 1-month free trial of LTX Studio.`,
-        ``,
-        `Name: ${name}`,
-        `Email: ${email}`,
-        ``,
-        `${message}`,
-        ``,
-        `Thanks!`
-      ];
-      const body = bodyLines.join('\n');
-      const params = new URLSearchParams({ subject, body });
-      return `mailto:${encodeURIComponent(RECIPIENT_EMAIL)}?${params.toString()}`;
-    }
-
-    function updateDraftLink() {
-      const name = /** @type {HTMLInputElement} */(document.getElementById('name')).value.trim();
-      const email = /** @type {HTMLInputElement} */(document.getElementById('email')).value.trim();
-      const message = /** @type {HTMLTextAreaElement} */(document.getElementById('message')).value.trim();
-      const url = buildMailtoUrl(name || 'Friend', email || 'unknown', message || 'I would love to try LTX Studio for a month.');
-      openEmailLink.href = url;
-    }
-
-    form.addEventListener('input', updateDraftLink);
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      updateDraftLink();
-      // Trigger the mail client draft
-      window.location.href = openEmailLink.href;
-    });
-
-    // Init
     document.getElementById('year').textContent = new Date().getFullYear().toString();
-    updateDraftLink();
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('submitted') === '1') {
+      var success = document.getElementById('success');
+      if (success) success.style.display = 'block';
+    }
   </script>
 </body>
 </html> 
